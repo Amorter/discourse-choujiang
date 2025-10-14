@@ -1,0 +1,30 @@
+.choujiang-card {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #fafbfc;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  padding: 18px 14px;
+  margin: 20px 0;
+}
+.choujiang-card .cj-title {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #0069d9;
+  margin-bottom: 10px;
+}
+.choujiang-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px 0;
+}
+.choujiang-card li {
+  margin-bottom: 4px;
+  color: #222;
+}
+.choujiang-card li span {
+  color: #888;
+}
+.choujiang-card .cj-footer {
+  color: #0069d9;
+  font-weight: bold;
+}
