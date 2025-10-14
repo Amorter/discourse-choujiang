@@ -38,3 +38,7 @@
 ```
 - git clone https://github.com/maiizii/discourse-choujiang.git
 ```
+
+## 前端显示
+- 为了方便灵活修改，将前端的显示单独用组件的方式添加
+- 新建一个组件，分别将/components/choujiang.css和/components/choujiang.js的内容粘贴进CSS、JS标签即可
