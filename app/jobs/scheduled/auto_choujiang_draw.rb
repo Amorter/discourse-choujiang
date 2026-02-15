@@ -39,38 +39,39 @@ module ::Jobs
         end
 
         winners = ::Choujiang.select_winners(topic, info)
-        unless winners && winners.any?
-          Rails.logger.warn("choujiang: topic #{topic.id} no winners found, skip")
-          next
-        end
 
-        winner_users = User.where(id: winners)
-        Rails.logger.warn("choujiang: topic #{topic.id} winners: #{winner_users.map(&:username).join(', ')}")
+        if winners && winners.any?
+          winner_users = User.where(id: winners)
+          Rails.logger.warn("choujiang: topic #{topic.id} winners: #{winner_users.map(&:username).join(', ')}")
 
-        ::Choujiang.announce_winners(topic, winners, info)
+          ::Choujiang.announce_winners(topic, winners, info)
 
-        winner_users.each do |winner|
-          begin
-            PostCreator.create!(
-              Discourse.system_user,
-              target_usernames: winner.username,
-              archetype: Archetype.private_message,
-              subtype: TopicSubtype.system_message,
-              title: "恭喜你中奖啦！",
-              raw: <<~MD
-                恭喜你在 [#{topic.title}](#{topic.relative_url}) 抽奖活动中获奖！
+          winner_users.each do |winner|
+            begin
+              PostCreator.create!(
+                Discourse.system_user,
+                target_usernames: winner.username,
+                archetype: Archetype.private_message,
+                subtype: TopicSubtype.system_message,
+                title: "恭喜你中奖啦！",
+                raw: <<~MD
+                  恭喜你在 [#{topic.title}](#{topic.relative_url}) 抽奖活动中获奖！
 
-                活动奖品：#{info[:prize] || "（奖品信息未填写）"}
+                  活动奖品：#{info[:prize] || "（奖品信息未填写）"}
 
-                请与抽奖活动组织者联系领奖事宜。
-              MD
-            )
-            Rails.logger.warn("choujiang: 通知已发送给获奖者 #{winner.username}")
-          rescue => e
-            Rails.logger.warn("choujiang: 通知获奖者失败 #{winner&.username}: #{e}")
+                  请与抽奖活动组织者联系领奖事宜。
+                MD
+              )
+              Rails.logger.warn("choujiang: 通知已发送给获奖者 #{winner.username}")
+            rescue => e
+              Rails.logger.warn("choujiang: 通知获奖者失败 #{winner&.username}: #{e}")
+            end
           end
+        else
+          Rails.logger.warn("choujiang: topic #{topic.id} no winners found, still closing")
         end
 
+        # 无论是否有中奖者，到时间都标记结束并关帖
         tag = Tag.find_or_create_by(name: drawn_tag)
         unless topic.tags.include?(tag)
           topic.tags << tag
@@ -78,10 +79,7 @@ module ::Jobs
         end
         Rails.logger.warn("choujiang: topic #{topic.id} draw complete, tag added")
 
-        # ================== 新增功能：开奖后自动锁定帖子 ==================
-        # 开奖后自动封贴（禁止回帖）
         topic.update!(closed: true)
-        # 开奖后自动锁定首贴（禁止编辑）
       end
     end
   end
