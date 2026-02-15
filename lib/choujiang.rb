@@ -19,7 +19,7 @@ module ::Choujiang
     if post.raw =~ /开奖时间[:：]\s*([0-9\- :]+)/
       time_str = $1.strip
       begin
-        info[:draw_time] = ActiveSupport::TimeZone['Beijing'].parse(time_str).utc
+        info[:draw_time] = ActiveSupport::TimeZone['Asia/Shanghai'].parse(time_str).utc
       rescue
         info[:draw_time] = Time.parse(time_str).utc rescue nil
       end
