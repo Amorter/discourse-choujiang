@@ -13,5 +13,4 @@ after_initialize do
 
   # 原有逻辑
   require_relative 'lib/choujiang'
-  require_relative 'jobs/auto_choujiang_draw.rb'
 end
