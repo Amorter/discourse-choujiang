@@ -1,8 +1,8 @@
 # name: discourse-choujiang
 # about: 定时自动开奖的抽奖（choujiang）插件，支持自定义规则与自动开奖
-# version: 0.4
-# authors: maiizii
-# url: https://github.com/maiizii/discourse-choujiang
+# version: 0.5
+# authors: Amort
+# url: https://github.com/Amorter/discourse-choujiang
 
 enabled_site_setting :choujiang_enabled
 
