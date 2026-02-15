@@ -13,4 +13,5 @@ after_initialize do
 
   # 原有逻辑
   require_relative 'lib/choujiang'
+  require_relative 'app/jobs/scheduled/auto_choujiang_draw'
 end
